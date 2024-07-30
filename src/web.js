@@ -72,11 +72,11 @@ module.exports = function useWeb(options = {}) {
     },
 
     /**
-     * @param {import('ioredis').Redis} redis 
+     * @param {import('ioredis').Redis} ioredis 
      * @returns 
      */
-    run(redis) {
-      const app = prv.getRoute(redis)
+    run(ioredis) {
+      const app = prv.getRoute(ioredis)
       const server = createServer(app)
       server.listen(opts.port, opts.host)
       server.on('error', () => console.log(`server error`))
