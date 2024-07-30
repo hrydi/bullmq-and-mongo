@@ -25,18 +25,18 @@ module.exports = function useWeb(options = {}) {
     
     getQueues() { return opts.queues },
     /**
-     * @param {import('ioredis').Redis} redis 
+     * @param {import('ioredis').Redis} ioredis 
      * @returns 
      */
-    getRoute(redis) {
+    getRoute(ioredis) {
       
-      if(!redis) throw new Error(`redis connection is required`)
+      if(!ioredis) throw new Error(`redis connection is required`)
         
       app.use(express.json())
       app.use(express.urlencoded({ extended: true }))
       
       app.get('/', (req,res) => res.json({ message: `welcome`, queues: prv.getQueues() }))
-      app.use('/queues', QueueRoutes(express.Router(), redis, prv.getQueues()))
+      app.use('/queues', QueueRoutes(express.Router(), ioredis, prv.getQueues()))
 
       // error handler
       app.use(
@@ -78,7 +78,7 @@ module.exports = function useWeb(options = {}) {
     run(redis) {
       const app = prv.getRoute(redis)
       const server = createServer(app)
-      server.listen(port, host)
+      server.listen(opts.port, opts.host)
       server.on('error', () => console.log(`server error`))
       server.on('close', () => console.log(`server close`))
       server.on('listening', () => console.log(`server run @${opts.host}:${opts.port}`))

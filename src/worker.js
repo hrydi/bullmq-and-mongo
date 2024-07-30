@@ -50,12 +50,12 @@ module.exports = function useWorker(options = {}) {
       resumed: null,
       stalled: null,
     },
-    run(redis) {
+    run(ioredis) {
       try {
         const queues = prv.queues()
         if(!queues.length) throw new Error(`you haven't registered any handler(s)`)
         for(const name of queues) {
-          const worker = new Worker(name, prv.processor(name), { connection: redis })
+          const worker = new Worker(name, prv.processor(name), { connection: ioredis })
           worker.on('active', async function(job, prev) {
             try {
               console.log(`job ${job.name} from worker ${worker.name} is active`)
