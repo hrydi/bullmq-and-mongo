@@ -2,6 +2,7 @@
   "name": "bullmq-and-mongo",
   "version": "1.0.0",
   "main": "index.js",
+  "types": "./src/types.js",
   "scripts": {
     "web:dev": "nodemon example/web.js -e js",
     "worker:dev": "nodemon example/worker.js -e js"
