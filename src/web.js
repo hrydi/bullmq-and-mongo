@@ -111,7 +111,7 @@ module.exports = function useWeb(options = {}) {
             opts.queues.push(names)
           }
         },
-        Run: () => prv.run(redis)
+        Run: () => prv.run(ioredis)
       }
     } catch (e) {
       return Promise.reject(e)
