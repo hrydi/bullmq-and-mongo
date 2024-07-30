@@ -1,0 +1,43 @@
+version: "3.7"
+services:
+  bullmq_mongo_apps:
+    container_name: bullmq_mongo_apps
+    build:
+      context: .
+      target: 'dev'
+    environment:
+      HOST: $HOST
+      PORT: $PORT
+      MONGO_DATABASE: $MONGO_DATABASE
+      MONGO_USERNAME: $MONGO_USERNAME
+      MONGO_PASSWORD: $MONGO_PASSWORD
+      MONGO_HOST: $MONGO_HOST
+      MONGO_PORT: $MONGO_PORT
+      REDIS_HOST: $REDIS_HOST
+      REDIS_PORT: $REDIS_PORT
+    command: sleep infinity
+    volumes:
+      - ${PWD}:/home/node/apps:z
+    networks:
+      - traefik-public
+    ports:
+      - ${PORT}:${PORT}
+
+  bullmq_mongo_keyval:
+    container_name: bullmq_mongo_keyval
+    image: valkey/valkey:alpine3.19
+    networks:
+      - traefik-public
+
+  bullmq_mongo_db:
+    container_name: bullmq_mongo_db
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_PASSWORD
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    external: true
